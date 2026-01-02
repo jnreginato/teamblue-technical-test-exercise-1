@@ -13,8 +13,6 @@ The solution is implemented in **Python 3**, using only **standard libraries**, 
 - Testability
 - Ease of execution
 
----
-
 ## Problem Summary
 
 Given a log file containing HTTP request records, the program must generate a report that includes, per IP address:
@@ -32,8 +30,6 @@ Given a log file containing HTTP request records, the program must generate a re
 - Output must be sorted by **number of requests (descending)**
 - The report can be generated in **CSV** or **JSON** format
 
----
-
 ## Input Format
 
 Each line in the input log file follows this structure:
@@ -46,8 +42,6 @@ Example:
 
 Malformed lines or records with a status different from `OK` are safely ignored.
 
----
-
 ## Project Structure
 
 ```
@@ -59,14 +53,10 @@ Malformed lines or records with a status different from `OK` are safely ignored.
 └── README.md
 ```
 
----
-
 ## Requirements
 
 - Python **3.10+** (tested with Python 3.13)
 - No external dependencies
-
----
 
 ## How to Run
 
@@ -94,8 +84,6 @@ python3 report_generator.py \
 ```bash
 python3 report_generator.py --help
 ```
-
----
 
 ## Output
 
@@ -128,8 +116,6 @@ IP Address,Number of Requests,Percentage of Total Requests,Total Bytes Sent,Perc
 ]
 ```
 
----
-
 ## Error Handling & Robustness
 
 The parser is intentionally defensive and handles:
@@ -141,8 +127,6 @@ The parser is intentionally defensive and handles:
 - Invalid statuses 
 - Invalid records are ignored without interrupting execution.
 
----
-
 ## Testing
 
 Basic unit tests are provided using Python’s built-in unittest module.
@@ -153,8 +137,6 @@ To run the tests:
 python3 -m unittest test_report_generator.py
 ```
 
----
-
 ## Design Notes
 
 - Business logic is fully decoupled from CLI parsing
@@ -162,13 +144,9 @@ python3 -m unittest test_report_generator.py
 - Paths are provided externally (no hardcoded absolute paths)
 - The solution favors readability and correctness over premature optimization
 
----
-
 ## Author
 
 Jonatan Reginato
-
----
 
 ## Notes
 

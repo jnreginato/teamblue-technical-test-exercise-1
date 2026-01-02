@@ -1,3 +1,5 @@
+import csv
+import json
 from collections import defaultdict
 from typing import Dict, List, Tuple
 
@@ -76,6 +78,32 @@ def compute_report(stats: Dict[str, Dict[str, int]]) -> List[Dict[str, float]]:
     return report
 
 
+def write_csv(report: List[Dict[str, float]], output_path: str) -> None:
+    with open(output_path, "w", newline="", encoding="utf-8") as csvfile:
+        writer = csv.writer(csvfile)
+        writer.writerow([
+            "IP Address",
+            "Number of Requests",
+            "Percentage of Total Requests",
+            "Total Bytes Sent",
+            "Percentage of Total Bytes",
+        ])
+
+        for row in report:
+            writer.writerow([
+                row["ip_address"],
+                row["requests"],
+                f"{row['requests_pct']:.2f}",
+                row["bytes"],
+                f"{row['bytes_pct']:.2f}",
+            ])
+
+
+def write_json(report: List[Dict[str, float]], output_path: str) -> None:
+    with open(output_path, "w", encoding="utf-8") as jsonfile:
+        json.dump(report, jsonfile, indent=2)
+
+
 def generate_report(
         input_log: str,
         output_file: str,
@@ -84,9 +112,11 @@ def generate_report(
     records = parse_log_file(input_log)
     stats = aggregate_by_ip(records)
     report = compute_report(stats)
-    print(report)
 
-    # write_report(output_file, output_format)
+    if output_format == "json":
+        write_json(report, output_file)
+    else:
+        write_csv(report, output_file)
 
 
 if __name__ == "__main__":

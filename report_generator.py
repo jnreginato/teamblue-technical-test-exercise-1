@@ -1,3 +1,4 @@
+import argparse
 import csv
 import json
 from collections import defaultdict
@@ -119,9 +120,38 @@ def generate_report(
         write_csv(report, output_file)
 
 
+def parse_cli_args() -> argparse.Namespace:
+    parser = argparse.ArgumentParser(
+        description="Generate traffic report per IP address from log files."
+    )
+
+    parser.add_argument(
+        "-i", "--input",
+        default="logfiles/requests.log",
+        help="Path to the input log file (e.g. requests.log)"
+    )
+
+    parser.add_argument(
+        "-o", "--output",
+        default="reports/ipaddr.csv",
+        help="Path to the output report file"
+    )
+
+    parser.add_argument(
+        "-f", "--format",
+        choices=["csv", "json"],
+        default="csv",
+        help="Output format (csv or json). Default: csv"
+    )
+
+    return parser.parse_args()
+
+
 if __name__ == "__main__":
+    args = parse_cli_args()
+
     generate_report(
-        input_log="logfiles/requests.log",
-        output_file="reports/ipaddr.csv",
-        output_format="csv",  # or "json"
+        input_log=args.input,
+        output_file=args.output,
+        output_format=args.format,
     )

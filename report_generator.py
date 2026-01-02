@@ -19,7 +19,14 @@ def parse_log_file(filepath: str) -> List[Tuple[str, int]]:
                 if status != "OK":
                     continue
 
-                records.append((ip, int(bytes_sent)))
+                bytes_value = int(bytes_sent)
+                if bytes_value < 0:
+                    continue
+
+                if not ip.strip():
+                    continue
+
+                records.append((ip, bytes_value))
 
             except ValueError:
                 # Skip malformed lines safely

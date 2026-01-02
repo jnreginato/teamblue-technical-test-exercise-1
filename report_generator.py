@@ -49,6 +49,33 @@ def aggregate_by_ip(records: List[Tuple[str, int]]) -> Dict[str, Dict[str, int]]
     return stats
 
 
+def compute_report(stats: Dict[str, Dict[str, int]]) -> List[Dict[str, float]]:
+    """
+    Computes percentages and returns a sorted report structure.
+    """
+    total_requests = sum(item["requests"] for item in stats.values())
+    total_bytes = sum(item["bytes"] for item in stats.values())
+
+    report = []
+
+    for ip, data in stats.items():
+        report.append({
+            "ip_address": ip,
+            "requests": data["requests"],
+            "requests_pct": (data["requests"] / total_requests) * 100 if total_requests else 0,
+            "bytes": data["bytes"],
+            "bytes_pct": (data["bytes"] / total_bytes) * 100 if total_bytes else 0,
+        })
+
+    # Sort by requests DESC, then bytes DESC
+    report.sort(
+        key=lambda x: (x["requests"], x["bytes"]),
+        reverse=True
+    )
+
+    return report
+
+
 def generate_report(
         input_log: str,
         output_file: str,
@@ -56,9 +83,9 @@ def generate_report(
 ) -> None:
     records = parse_log_file(input_log)
     stats = aggregate_by_ip(records)
-    print(stats)
+    report = compute_report(stats)
+    print(report)
 
-    # compute_report
     # write_report(output_file, output_format)
 
 

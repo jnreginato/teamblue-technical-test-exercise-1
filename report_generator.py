@@ -1,4 +1,5 @@
-from typing import List, Tuple
+from collections import defaultdict
+from typing import Dict, List, Tuple
 
 
 def parse_log_file(filepath: str) -> List[Tuple[str, int]]:
@@ -35,15 +36,28 @@ def parse_log_file(filepath: str) -> List[Tuple[str, int]]:
     return records
 
 
+def aggregate_by_ip(records: List[Tuple[str, int]]) -> Dict[str, Dict[str, int]]:
+    """
+    Aggregates request count and total bytes per IP.
+    """
+    stats = defaultdict(lambda: {"requests": 0, "bytes": 0})
+
+    for ip, bytes_sent in records:
+        stats[ip]["requests"] += 1
+        stats[ip]["bytes"] += bytes_sent
+
+    return stats
+
+
 def generate_report(
         input_log: str,
         output_file: str,
         output_format: str = "csv",
 ) -> None:
     records = parse_log_file(input_log)
-    print(records)
+    stats = aggregate_by_ip(records)
+    print(stats)
 
-    # aggregate_by_ip
     # compute_report
     # write_report(output_file, output_format)
 
